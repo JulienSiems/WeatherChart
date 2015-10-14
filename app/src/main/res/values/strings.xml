@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">Weather Chart</string>
+    <string name="action_settings">Settings</string>
+    <string name="list_view">List View</string>
+    <string name="recycler_view">Recycler View</string>
+    <string name="deleted">Deleted</string>
+    <string name="undo">UNDO</string>
+    <string name="temperature">Temperature</string>
+    <string name="humidity">Humidity</string>
+    <string name="about">About</string>
+    <string name="about_body"><![CDATA[
+        Floating Action Button, a library by <a href="https://plus.google.com/+OleksandrMelnykov">Oleksandr Melnykov</a>.<br/>
+        <a href=\'https://github.com/makovkastar/FloatingActionButton\'>https://github.com/makovkastar/FloatingActionButton</a>
+    ]]></string>
+    <string name="city_hint">Enter City</string>
+    <string name="cancel_dialog">Cancel</string>
+    <string name="submit_city_request">Submit</string>
+</resources>

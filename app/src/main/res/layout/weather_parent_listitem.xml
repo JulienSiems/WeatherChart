@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/externalLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <RelativeLayout
+        android:id="@+id/internalLayout"
+        android:background="@color/red"
+        android:layout_height="80dp"
+        android:layout_weight="0.96"
+        android:paddingStart="15dp"
+        android:paddingEnd="10dp"
+        android:layout_width="0dp">
+
+        <com.example.julien.weatherapp2.AutoResizeTextView
+            android:layout_width = "130dp"
+            android:layout_height = "50dp"
+            android:text="London"
+            android:id="@+id/city"
+            android:gravity="center_vertical"
+            android:maxLines="1"
+            android:textSize="30sp"
+            android:textColor="#eff5f3"
+            android:textStyle="bold"
+            android:layout_centerVertical="true"/>
+
+
+        <TextView
+            android:text="25°C"
+            android:id="@+id/temperature"
+            android:background="@drawable/circle"
+            android:textSize="16sp"
+            android:textColor="#eff5f3"
+            android:layout_marginEnd="10dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:layout_toStartOf="@+id/humidity"
+            android:singleLine="true"
+            android:scrollbarAlwaysDrawHorizontalTrack="true"/>
+
+        <TextView
+            android:text="20%"
+            android:id="@+id/humidity"
+            android:background="@drawable/circle"
+            android:textSize="16sp"
+            android:textColor="#eff5f3"
+            android:layout_marginEnd="10dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:layout_toStartOf="@+id/thumbnailImage"
+            android:singleLine="true"
+            android:scrollbarAlwaysDrawHorizontalTrack="true"/>
+
+        <ImageView
+            android:id="@+id/thumbnailImage"
+            android:background="@drawable/circle"
+            android:src="@drawable/rainy"
+            android:layout_alignParentEnd="true"
+            android:adjustViewBounds="true"
+            android:layout_centerVertical="true"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:padding="10dp"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/panelLayout"
+        android:layout_weight="0.04"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginEnd="-1dp"
+        android:background="@color/red_dark">
+
+        <ImageView
+            android:id="@+id/showGraphArrow"
+            android:layout_width="10dp"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:adjustViewBounds="true"
+            android:src="@drawable/arrow_down"
+            android:layout_marginEnd="15dp" />
+
+    </RelativeLayout>
+
+</LinearLayout>
