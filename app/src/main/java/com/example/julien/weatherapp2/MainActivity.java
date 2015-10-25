@@ -27,11 +27,16 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import data.WeatherExpandableAdapter;
 import data.WeatherParentViewHolder;
@@ -134,8 +139,9 @@ public class MainActivity extends AppCompatActivity {
         weathers = new ArrayList<>();
         for (String city : cityNames) {
             request = new JsonObjectRequest(
-                    "http://api.openweathermap.org/data/2.5/forecast?q=" + city + //API KEY
-                            "&units=metric&APPID=a957e9ff0700914f4f97c1739ea4171b",
+                    "https://query.yahooapis.com/v1/public/yql?q=SELECT%20*%20FROM%20weather.bylocation%20WHERE%20location%3D%27"
+                            + city +
+                            "%27%20AND%20unit%3D%22c%22&format=json&diagnostics=true&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=",
                     listener, errorListener);
             queue.add(request);
         }
@@ -154,40 +160,43 @@ public class MainActivity extends AppCompatActivity {
 
             try {
                 //retrieve the information from the json object and fill them into the object
-                weather.setCityName(response.getJSONObject("city").getString("name"));
-                JSONArray weatherDataArray = response.getJSONArray("list");
-                JSONObject currentWeather = weatherDataArray.getJSONObject(0);
+                JSONObject channel = response.getJSONObject("query")
+                                                .getJSONObject("results")
+                                                .getJSONObject("weather")
+                                                .getJSONObject("rss")
+                                                .getJSONObject("channel");
+                weather.setCityName(channel.getJSONObject("location").getString("city"));
+                JSONObject weatherItem = channel.getJSONObject("item");
+                JSONArray weatherDataArray = weatherItem.getJSONArray("forecast");
 
-                for (int i = 0; i < 12; i++) {
+                DateFormat dfs = new SimpleDateFormat("dd MMM yyyy", Locale.ENGLISH);
+
+                for (int i = 0; i < weatherDataArray.length(); i++) {
                     JSONObject weatherPredict = weatherDataArray.getJSONObject(i);
 
                     TimeData temperatureTimeData = new TimeData();
-                    temperatureTimeData.setTime(weatherPredict.getInt("dt"));
-                    temperatureTimeData.setData(weatherPredict.getJSONObject("main").getDouble("temp"));
-                    temperatures.add(temperatureTimeData);
+                    String date = weatherPredict.getString("date");
+                    Date intDate = dfs.parse(date);
+                    long time = intDate.getTime()/1000;
 
-                    TimeData humidityTimeData = new TimeData();
-                    humidityTimeData.setTime(weatherPredict.getInt("dt"));
-                    humidityTimeData.setData(weatherPredict.getJSONObject("main").getDouble("humidity"));
-                    humidities.add(humidityTimeData);
+                    temperatureTimeData.setTime((int) time);
+                    temperatureTimeData.setData(weatherPredict.getInt("high"));
+                    temperatures.add(temperatureTimeData);
                 }
 
                 weatherChildGraphs.add(new WeatherChildGraph(temperatures, getResources().getString(R.string.temperature)));
-                weatherChildGraphs.add(new WeatherChildGraph(humidities, getResources().getString(R.string.humidity)));
+                //weatherChildGraphs.add(new WeatherChildGraph(humidities, getResources().getString(R.string.humidity)));
                 weather.setWeatherChildGraphs(weatherChildGraphs);
 
-                JSONObject weatherObject = currentWeather.getJSONObject("main");
-                weather.setTemperature((int) weatherObject.getDouble("temp"));
-                weather.setHumidity((int) weatherObject.getDouble("humidity"));
-                weather.setSkyCondition(currentWeather
-                        .getJSONArray("weather")
-                        .getJSONObject(0)
-                        .getString("description"));
-                //weather.setThumbnailResource(R.drawable.sunny_and_cloudy);
+                JSONObject currentWeather = weatherItem.getJSONObject("condition");
+                weather.setTemperature((int) currentWeather.getDouble("temp"));
+                weather.setHumidity(channel.getJSONObject("atmosphere").getInt("humidity"));
+                weather.setSkyCondition(currentWeather.getString("text"));
 
                 weathers.add(weather);
-
             } catch (JSONException e) {
+                e.printStackTrace();
+            } catch (ParseException e) {
                 e.printStackTrace();
             }
         }

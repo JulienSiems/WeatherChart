@@ -5,9 +5,7 @@ import com.example.julien.weatherapp2.R;
 
 import java.util.List;
 
-/**
- * Created by Julien on 28.09.2015.
- */
+
 public class Weather implements ParentListItem{
 
     private int temperature;
@@ -74,19 +72,21 @@ public class Weather implements ParentListItem{
     }
 
     public void setSkyCondition(String skyCondition) {
-        this.skyCondition = skyCondition;
+        skyCondition = skyCondition.toLowerCase();
+        this.skyCondition = skyCondition.toLowerCase();
 
         if (skyCondition.contains("cloud")) {
             backgroundColor = R.color.grey;
             expandPanelColor = R.color.grey_dark;
             setChartBackgroundColor(R.color.grey_really_dark);
 
-            if (skyCondition.contains("scattered") || skyCondition.contains("few"))
+            if (skyCondition.contains("mostly") || skyCondition.contains("partly"))
                 setThumbnailResource(R.drawable.sunny_and_cloudy);
             else
                 setThumbnailResource(R.drawable.cloudy);
         }
-        else if (skyCondition.contains("rain")) {
+        else if (skyCondition.contains("rain") ||
+                (skyCondition.contains("showers") && !skyCondition.contains("snow"))) {
             backgroundColor = R.color.blue;
             expandPanelColor = R.color.blue_dark;
             setChartBackgroundColor(R.color.blue_really_dark);
@@ -100,12 +100,12 @@ public class Weather implements ParentListItem{
             else
                 setThumbnailResource(R.drawable.rainy_little_rain);
 
-        } else if (skyCondition.contains("snowy")) {
+        } else if (skyCondition.contains("snow")) {
             backgroundColor = R.color.grey;
             expandPanelColor = R.color.grey_dark;
             setChartBackgroundColor(R.color.grey_really_dark);
 
-            if (skyCondition.contains("light"))
+            if (skyCondition.contains("light") || skyCondition.contains("flurries"))
                 setThumbnailResource(R.drawable.snow_light);
             else
                 setThumbnailResource(R.drawable.snow_heavy);
@@ -115,41 +115,6 @@ public class Weather implements ParentListItem{
             setChartBackgroundColor(R.color.orange_really_dark);
             setThumbnailResource(R.drawable.sunny);
         }
-
-        /*
-
-        if (skyCondition.equals("moderate rain")) {
-            backgroundColor = R.color.blue;
-            expandPanelColor = R.color.blue_dark;
-            setChartBackgroundColor(R.color.blue_really_dark);
-            setThumbnailResource(R.drawable.rainy);
-        }
-        else if (skyCondition.equals("light rain")) {
-            backgroundColor = R.color.blue;
-            expandPanelColor = R.color.blue_dark;
-            setChartBackgroundColor(R.color.blue_really_dark);
-            setThumbnailResource(R.drawable.rainy_little_rain);
-        }
-        else if (skyCondition.contains("clouds")) {
-            backgroundColor = R.color.grey;
-            expandPanelColor = R.color.grey_dark;
-            setChartBackgroundColor(R.color.grey_really_dark);
-            setThumbnailResource(R.drawable.cloudy);
-        }
-        else if (skyCondition.contains("clear")) {
-            backgroundColor = R.color.orange;
-            expandPanelColor = R.color.orange_dark;
-            setChartBackgroundColor(R.color.orange_really_dark);
-            setThumbnailResource(R.drawable.sunny);
-        }
-        else {
-            backgroundColor = R.color.orange;
-            expandPanelColor = R.color.orange_dark;
-            setChartBackgroundColor(R.color.orange_really_dark);
-            setThumbnailResource(R.drawable.sunny);
-        }
-        this.skyCondition = skyCondition;
-        */
     }
 
     public int getThumbnailResource() {

@@ -60,13 +60,13 @@ public class WeatherChildViewHolder extends ChildViewHolder {
         lineDataSet.setDrawValues(false);
 
         // Setting the hours for labels
-        DateFormat df = new SimpleDateFormat("hh:'00' a");
+        DateFormat df = new SimpleDateFormat("dd");
         ArrayList<String> labels = new ArrayList<>();
         for (int i = 0; i < timeDatas.size(); i++) {
             TimeData timeDataItem = timeDatas.get(i);
             Date time = new Date((long) timeDataItem.getTime() * 1000);
             String hour = df.format(time);
-            labels.add(String.valueOf(time.getHours()));
+            labels.add(hour);
         }
 
         LineData data = new LineData(labels, lineDataSet);
