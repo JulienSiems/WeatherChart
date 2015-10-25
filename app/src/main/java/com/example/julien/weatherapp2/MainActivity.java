@@ -155,7 +155,9 @@ public class MainActivity extends AppCompatActivity {
             Weather weather = new Weather();
             List<WeatherChildGraph> weatherChildGraphs = new ArrayList();
 
-            ArrayList<TimeData> temperatures = new ArrayList();
+            ArrayList<TimeData> temperatureMax = new ArrayList<>();
+            ArrayList<TimeData> temperatureMin = new ArrayList<>();
+
             ArrayList<TimeData> humidities = new ArrayList();
 
             try {
@@ -174,17 +176,23 @@ public class MainActivity extends AppCompatActivity {
                 for (int i = 0; i < weatherDataArray.length(); i++) {
                     JSONObject weatherPredict = weatherDataArray.getJSONObject(i);
 
-                    TimeData temperatureTimeData = new TimeData();
+                    TimeData temperatureTimeDataMax = new TimeData();
                     String date = weatherPredict.getString("date");
                     Date intDate = dfs.parse(date);
                     long time = intDate.getTime()/1000;
 
-                    temperatureTimeData.setTime((int) time);
-                    temperatureTimeData.setData(weatherPredict.getInt("high"));
-                    temperatures.add(temperatureTimeData);
+                    temperatureTimeDataMax.setTime((int) time);
+                    temperatureTimeDataMax.setData(weatherPredict.getInt("high"));
+                    temperatureMax.add(temperatureTimeDataMax);
+
+
+                    TimeData temperatureTimeDataMin = new TimeData();
+                    temperatureTimeDataMin.setTime((int) time);
+                    temperatureTimeDataMin.setData(weatherPredict.getInt("low"));
+                    temperatureMin.add(temperatureTimeDataMin);
                 }
 
-                weatherChildGraphs.add(new WeatherChildGraph(temperatures, getResources().getString(R.string.temperature)));
+                weatherChildGraphs.add(new WeatherChildGraph(temperatureMax, temperatureMin,getResources().getString(R.string.temperature)));
                 //weatherChildGraphs.add(new WeatherChildGraph(humidities, getResources().getString(R.string.humidity)));
                 weather.setWeatherChildGraphs(weatherChildGraphs);
 

@@ -3,6 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools" tools:context=".MainActivity">
     <item android:id="@+id/addWeather"
         android:icon="@drawable/add_button"
-        android:title="Add Button"
-        android:showAsAction="ifRoom"/>
+        android:title="@string/add_city"
+        android:showAsAction="always"/>
 </menu>

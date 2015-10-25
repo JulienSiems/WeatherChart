@@ -61,7 +61,7 @@
         <ImageView
             android:id="@+id/thumbnailImage"
             android:background="@drawable/circle"
-            android:src="@drawable/rainy"
+            android:src="@drawable/windy_small"
             android:layout_alignParentEnd="true"
             android:adjustViewBounds="true"
             android:layout_centerVertical="true"

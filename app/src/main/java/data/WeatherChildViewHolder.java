@@ -40,36 +40,58 @@ public class WeatherChildViewHolder extends ChildViewHolder {
 
         lineChart.setDescription("");
 
-        List<TimeData> timeDatas = weatherChildGraph.getData();
-        ArrayList<Entry> entries = new ArrayList<>();
-        for (int i = 0; i < timeDatas.size(); i++) {
-            TimeData timeDataItem = timeDatas.get(i);
-            Entry entry = new Entry((int) timeDataItem.getData(), i);
-            entries.add(entry);
+        List<TimeData> timeDatasMax = weatherChildGraph.getPropMax();
+        List<TimeData> timeDatasMin = weatherChildGraph.getPropMin();
+
+        ArrayList<Entry> entriesMax = new ArrayList<>();
+        ArrayList<Entry> entriesMin = new ArrayList<>();
+
+        for (int i = 0; i < timeDatasMax.size(); i++) {
+            TimeData timeDataMax = timeDatasMax.get(i);
+            Entry entry = new Entry((int) timeDataMax.getData(), i);
+            entriesMax.add(entry);
+
+            TimeData timeDataMin = timeDatasMin.get(i);
+            entry = new Entry((int) timeDataMin.getData(), i);
+            entriesMin.add(entry);
         }
 
-        LineDataSet lineDataSet = new LineDataSet(entries, weatherChildGraph.getProperty());
-        lineDataSet.setDrawCubic(true);
-        lineDataSet.setAxisDependency(YAxis.AxisDependency.LEFT);
-        lineDataSet.setLineWidth(3.0f);
-        lineDataSet.setColor(Color.WHITE);
-        lineDataSet.enableDashedLine(10.0f, 10.0f, 0.0f);
-        lineDataSet.setDrawCircles(false);
-        lineDataSet.setFillColor(Color.WHITE);
-        //lineDataSet.setDrawFilled(true);
-        lineDataSet.setDrawValues(false);
+        LineDataSet lineDataSetMax = new LineDataSet(entriesMax, "High " + weatherChildGraph.getProperty());
+        LineDataSet lineDataSetMin = new LineDataSet(entriesMin, "Low " + weatherChildGraph.getProperty());
+
+        int blue = 0xff3f51b5;
+
+        lineDataSetMax.setDrawCubic(true);
+        lineDataSetMax.setAxisDependency(YAxis.AxisDependency.LEFT);
+        lineDataSetMax.setLineWidth(4.0f);
+        lineDataSetMax.setColor(Color.RED);
+        lineDataSetMax.enableDashedLine(10.0f, 10.0f, 0.0f);
+        lineDataSetMax.setDrawCircles(false);
+        lineDataSetMax.setDrawValues(false);
+        lineDataSetMax.setFillColor(Color.RED);
+
+        lineDataSetMin.setDrawCubic(true);
+        lineDataSetMin.setAxisDependency(YAxis.AxisDependency.LEFT);
+        lineDataSetMin.setLineWidth(2.0f);
+        lineDataSetMin.setColor(blue);
+        lineDataSetMin.enableDashedLine(10.0f, 10.0f, 0.0f);
+        lineDataSetMin.setDrawCircles(false);
+        lineDataSetMin.setDrawValues(false);
+        lineDataSetMin.setFillColor(blue);
 
         // Setting the hours for labels
         DateFormat df = new SimpleDateFormat("dd");
         ArrayList<String> labels = new ArrayList<>();
-        for (int i = 0; i < timeDatas.size(); i++) {
-            TimeData timeDataItem = timeDatas.get(i);
+        for (int i = 0; i < timeDatasMax.size(); i++) {
+            TimeData timeDataItem = timeDatasMax.get(i);
             Date time = new Date((long) timeDataItem.getTime() * 1000);
             String hour = df.format(time);
             labels.add(hour);
         }
 
-        LineData data = new LineData(labels, lineDataSet);
+        LineData data = new LineData(labels, lineDataSetMax);
+        data.addDataSet(lineDataSetMin);
+
         lineChart.setTouchEnabled(false);
         lineChart.animateX(2000);
         lineChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);

@@ -8,21 +8,31 @@ import java.util.List;
 public class WeatherChildGraph  {
 
     // list containing all the information for the graphs
-    private List<TimeData> data;
+    private List<TimeData> propMin;
+    private List<TimeData> propMax;
     private String property;
     private int backgroundColor;
 
-    public WeatherChildGraph(List<TimeData> data, String property) {
-        this.data = data;
+    public WeatherChildGraph(List<TimeData> propMax, List<TimeData> propMin, String property) {
+        this.propMax = propMax;
+        this.propMin = propMin;
         this.property = property;
     }
 
-    public List<TimeData> getData() {
-        return data;
+    public List<TimeData> getPropMin() {
+        return propMin;
     }
 
-    public void setData(List<TimeData> data) {
-        this.data = data;
+    public void setPropMin(List<TimeData> propMin) {
+        this.propMin = propMin;
+    }
+
+    public List<TimeData> getPropMax() {
+        return propMax;
+    }
+
+    public void setPropMax(List<TimeData> propMax) {
+        this.propMax = propMax;
     }
 
     public String getProperty() {

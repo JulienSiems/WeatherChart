@@ -109,6 +109,11 @@ public class Weather implements ParentListItem{
                 setThumbnailResource(R.drawable.snow_light);
             else
                 setThumbnailResource(R.drawable.snow_heavy);
+        } else if (skyCondition.contains("wind")) {
+            backgroundColor = R.color.grey;
+            expandPanelColor = R.color.grey_dark;
+            setChartBackgroundColor(R.color.grey_really_dark);
+            setThumbnailResource(R.drawable.windy_small);
         } else {
             backgroundColor = R.color.orange;
             expandPanelColor = R.color.orange_dark;
