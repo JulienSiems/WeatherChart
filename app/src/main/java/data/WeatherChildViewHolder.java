@@ -72,7 +72,7 @@ public class WeatherChildViewHolder extends ChildViewHolder {
 
         lineDataSetMin.setDrawCubic(true);
         lineDataSetMin.setAxisDependency(YAxis.AxisDependency.LEFT);
-        lineDataSetMin.setLineWidth(2.0f);
+        lineDataSetMin.setLineWidth(4.0f);
         lineDataSetMin.setColor(blue);
         lineDataSetMin.enableDashedLine(10.0f, 10.0f, 0.0f);
         lineDataSetMin.setDrawCircles(false);

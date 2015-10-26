@@ -1,7 +1,6 @@
 package com.example.julien.weatherapp2;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,7 +11,6 @@ import android.view.View;
 import android.view.animation.RotateAnimation;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -52,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
     private List<ParentListItem> weathers = new ArrayList();
     private ArrayList<String> cityNames = new ArrayList(Arrays.asList("Paris", "Washington",
             "Berlin", "Peking", "Oslo", "Geneva", "Bangkok", "Aberdeen", "Tallinn", "Cologne"));
+    private int counter = 0;
 
     // , "Tartu", "Oldenburg", "Dubai", "Peking", "Oslo", "Geneva", "Bangkok", "Aberdeen", "Tallinn", "Cologne"
     private RequestQueue queue;
@@ -89,10 +88,14 @@ public class MainActivity extends AppCompatActivity {
                             return 1;
                     }
                 });
-
-                weatherExpandableAdapter = new WeatherExpandableAdapter(MainActivity.this, weathers);
-                weatherExpandableAdapter.setExpandCollapseListener(expandCollapseListener);
-                weatherList.setAdapter(weatherExpandableAdapter);
+                counter++;
+                // only update recyclerview once all requests are finished
+                if (counter == cityNames.size()) {
+                    weatherExpandableAdapter = new WeatherExpandableAdapter(MainActivity.this, weathers);
+                    weatherExpandableAdapter.setExpandCollapseListener(expandCollapseListener);
+                    weatherList.setAdapter(weatherExpandableAdapter);
+                    counter = 0;
+                }
             }
         });
 
@@ -171,7 +174,7 @@ public class MainActivity extends AppCompatActivity {
                 JSONObject weatherItem = channel.getJSONObject("item");
                 JSONArray weatherDataArray = weatherItem.getJSONArray("forecast");
 
-                DateFormat dfs = new SimpleDateFormat("dd MMM yyyy", Locale.ENGLISH);
+                DateFormat dfs = new SimpleDateFormat("d MMM yyyy", Locale.ENGLISH);
 
                 for (int i = 0; i < weatherDataArray.length(); i++) {
                     JSONObject weatherPredict = weatherDataArray.getJSONObject(i);
@@ -192,11 +195,16 @@ public class MainActivity extends AppCompatActivity {
                     temperatureMin.add(temperatureTimeDataMin);
                 }
 
-                weatherChildGraphs.add(new WeatherChildGraph(temperatureMax, temperatureMin,getResources().getString(R.string.temperature)));
+                weatherChildGraphs.add(new WeatherChildGraph(temperatureMax, temperatureMin, getResources().getString(R.string.temperature)));
                 //weatherChildGraphs.add(new WeatherChildGraph(humidities, getResources().getString(R.string.humidity)));
                 weather.setWeatherChildGraphs(weatherChildGraphs);
 
+                //dfs = new SimpleDateFormat("E', 'd MMMM yyyy hh:mm a z", Locale.ENGLISH);
+
                 JSONObject currentWeather = weatherItem.getJSONObject("condition");
+               /* Date pubdate = dfs.parse(currentWeather.getString("date"));
+                long time = pubdate.getTime()/1000;
+                weather.setTime((int) time);*/
                 weather.setTemperature((int) currentWeather.getDouble("temp"));
                 weather.setHumidity(channel.getJSONObject("atmosphere").getInt("humidity"));
                 weather.setSkyCondition(currentWeather.getString("text"));

@@ -29,8 +29,8 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.1.0'
     compile 'com.android.support:recyclerview-v7:23.1.0'
     compile 'com.android.support:design:23.1.0'
-    compile 'com.bignerdranch.android:expandablerecyclerview:2.0.0'
-    compile 'com.github.PhilJay:MPAndroidChart:v2.1.4'
+    compile 'com.bignerdranch.android:expandablerecyclerview:2.0.3'
+    compile 'com.github.PhilJay:MPAndroidChart:v2.1.5'
     compile 'com.mcxiaoke.volley:library:1.0.19'
     compile 'me.grantland:autofittextview:0.2.+'
 }

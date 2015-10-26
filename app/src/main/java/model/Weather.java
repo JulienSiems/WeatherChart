@@ -16,9 +16,18 @@ public class Weather implements ParentListItem{
     private int thumbnailResource;
     private int backgroundColor;
     private int expandPanelColor;
+    private int time;
     private boolean isExpanded = false;
 
     public Weather() {
+    }
+
+    public int getTime() {
+        return time;
+    }
+
+    public void setTime(int time) {
+        this.time = time;
     }
 
     public boolean isExpanded() {
@@ -72,6 +81,7 @@ public class Weather implements ParentListItem{
     }
 
     public void setSkyCondition(String skyCondition) {
+
         skyCondition = skyCondition.toLowerCase();
         this.skyCondition = skyCondition.toLowerCase();
 
