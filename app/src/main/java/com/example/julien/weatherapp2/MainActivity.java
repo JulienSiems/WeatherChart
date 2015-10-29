@@ -2,6 +2,8 @@ package com.example.julien.weatherapp2;
 
 import android.app.Dialog;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -48,11 +50,10 @@ public class MainActivity extends AppCompatActivity {
     private EditText cityInput;
     private Button submitButton, cancelButton;
     private List<ParentListItem> weathers = new ArrayList();
-    private ArrayList<String> cityNames = new ArrayList(Arrays.asList("Paris", "Washington",
-            "Berlin", "Peking", "Oslo", "Geneva", "Bangkok", "Aberdeen", "Tallinn", "Cologne"));
+    private ArrayList<String> cityNames = new ArrayList(Arrays.asList("Paris", "Washington","Berlin", "Peking", "Oslo", "Geneva", "Bangkok", "Aberdeen", "Tallinn", "Cologne"));
     private int counter = 0;
 
-    // , "Tartu", "Oldenburg", "Dubai", "Peking", "Oslo", "Geneva", "Bangkok", "Aberdeen", "Tallinn", "Cologne"
+    // "Berlin", "Peking", "Oslo", "Geneva", "Bangkok", "Aberdeen", "Tallinn", "Cologne"
     private RequestQueue queue;
     private WeatherExpandableAdapter weatherExpandableAdapter;
 
@@ -60,9 +61,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         queue = Volley.newRequestQueue(this);
-
         requestWeatherData();
 
         weatherList = (RecyclerView) findViewById(R.id.weatherList);
@@ -71,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onRequestFinished(Request<Object> request) {
 
-                // brings the weather item list back to its initial order
+                // brings the weather item list into the same order as the city list order
                 Collections.sort(weathers, new Comparator<ParentListItem>() {
                     @Override
                     public int compare(ParentListItem lhs, ParentListItem rhs) {
@@ -89,7 +88,8 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
                 counter++;
-                // only update recyclerview once all requests are finished
+
+                // only set the adapter once all the weather items have been loaded
                 if (counter == cityNames.size()) {
                     weatherExpandableAdapter = new WeatherExpandableAdapter(MainActivity.this, weathers);
                     weatherExpandableAdapter.setExpandCollapseListener(expandCollapseListener);
@@ -99,7 +99,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                addWeatherItem();
+            }
+        });
     }
 
     ExpandableRecyclerAdapter.ExpandCollapseListener expandCollapseListener = new ExpandableRecyclerAdapter.ExpandCollapseListener() {
@@ -199,12 +205,8 @@ public class MainActivity extends AppCompatActivity {
                 //weatherChildGraphs.add(new WeatherChildGraph(humidities, getResources().getString(R.string.humidity)));
                 weather.setWeatherChildGraphs(weatherChildGraphs);
 
-                //dfs = new SimpleDateFormat("E', 'd MMMM yyyy hh:mm a z", Locale.ENGLISH);
 
                 JSONObject currentWeather = weatherItem.getJSONObject("condition");
-               /* Date pubdate = dfs.parse(currentWeather.getString("date"));
-                long time = pubdate.getTime()/1000;
-                weather.setTime((int) time);*/
                 weather.setTemperature((int) currentWeather.getDouble("temp"));
                 weather.setHumidity(channel.getJSONObject("atmosphere").getInt("humidity"));
                 weather.setSkyCondition(currentWeather.getString("text"));
@@ -244,10 +246,10 @@ public class MainActivity extends AppCompatActivity {
         submitButton = (Button) dialog.findViewById(R.id.submit);
         cancelButton = (Button) dialog.findViewById(R.id.cancel_dialog);
 
+        // set the on click listener to submit the new city
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //String s = cityInput.getText().toString();
                 cityNames.add(cityInput.getText().toString());
                 requestWeatherData();
                 weatherExpandableAdapter.notifyDataSetChanged();
@@ -267,14 +269,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
-        int id = item.getItemId();
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.addWeather) {
-            addWeatherItem();
-            return true;
-        }
-
         return super.onOptionsItemSelected(item);
     }
 
